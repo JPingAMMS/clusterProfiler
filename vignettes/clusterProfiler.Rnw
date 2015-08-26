@@ -265,11 +265,15 @@ The annotation package, KEGG.db, is not updated since 2012. It's now pretty old 
 With this new feature, organism is not restricted to those supported in previous release, it can be any species that have KEGG annotation data available in KEGG database. User should pass abbreviation of academic name to the \Robject{organism} parameter. The full list of KEGG supported organisms can be accessed via \url{http://www.genome.jp/kegg/catalog/org_list.html}.
 
 \subsection{KEGG over-representation test}
+
+To speed up the compilation of this document, we set \textit{use\_internal\_data = TRUE}.
+
 <<enrichKEGG>>=
 kk <- enrichKEGG(gene         = gene,
                  organism     = "human",
                  pvalueCutoff = 0.05, 
-                 readable     = TRUE)
+                 readable     = TRUE,
+                 use_internal_data = TRUE)
 head(summary(kk))
 @
 
@@ -280,7 +284,8 @@ kk2 <- gseKEGG(geneList     = geneList,
                nPerm        = 100,
                minGSSize    = 120,
                pvalueCutoff = 0.01,
-               verbose      = FALSE)
+               verbose      = FALSE,
+               use_internal_data = TRUE)
 head(summary(kk2))
 @
 
