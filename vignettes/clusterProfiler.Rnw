@@ -383,10 +383,10 @@ data(gcSample)
 lapply(gcSample, head)
 @
 
-The input for \textit{geneCluster} parameter should be a named list of gene IDs.
+The input for \textit{geneCluster} parameter should be a named list of gene IDs. 
 
 <<comparecluster>>=
-ck <- compareCluster(geneCluster = gcSample, fun = "enrichKEGG")
+ck <- compareCluster(geneCluster = gcSample, fun = "enrichKEGG", use_internal_data = TRUE)
 head(summary(ck))
 @
 
