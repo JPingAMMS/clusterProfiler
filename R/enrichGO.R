@@ -26,10 +26,10 @@
 ##' @author Guangchuang Yu \url{http://ygc.name}
 ##' @examples
 ##' \dontrun{
-##' 	data(gcSample)
-##' 	yy <- enrichGO(gcSample[[1]], 'org.Hs.eg.db', ont="BP", pvalueCutoff=0.01)
-##' 	head(summary(yy))
-##' 	plot(yy)
+##'     data(geneList)
+##' 	de <- names(geneList)[1:100]
+##' 	yy <- enrichGO(de, 'org.Hs.eg.db', ont="BP", pvalueCutoff=0.01)
+##' 	head(yy)
 ##' }
 enrichGO <- function(gene,
                      OrgDb,
