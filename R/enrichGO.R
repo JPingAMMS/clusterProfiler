@@ -44,7 +44,7 @@ enrichGO <- function(gene,
                      readable=FALSE) {
 
     ont %<>% toupper
-    ont <- match.arg(ont, c("BP", "CC", "MF", "ALL"))
+    ont <- match.arg(ont, c("BP", "CC", "MF"))
 
     GO_DATA <- get_GO_data(OrgDb, ont, keytype)
 
