@@ -1,6 +1,6 @@
 ##' list ID types supported by annoDb
 ##'
-##' 
+##'
 ##' @title idType
 ##' @param OrgDb annotation db
 ##' @return character vector
@@ -15,7 +15,7 @@ idType <- function(OrgDb = "org.Hs.eg.db") {
 
 ##' Biological Id TRanslator
 ##'
-##' 
+##'
 ##' @title bitr
 ##' @param geneID input gene id
 ##' @param fromType input id type
@@ -37,14 +37,14 @@ bitr <- function(geneID, fromType, toType, OrgDb, drop=TRUE) {
     if (! all(toType %in% idTypes)) {
         stop("'toType' ", msg)
     }
-    
+
     geneID %<>% as.character %>% unique
     db <- load_OrgDb(OrgDb)
     res <- suppressWarnings(select(db,
                                    keys = geneID,
-                                   keytype = fromType, 
+                                   keytype = fromType,
                                    columns=c(fromType, toType)))
-    
+
     ii <- which(is.na(res[,2]))
     if (length(ii)) {
         n <- res[ii, 1] %>% unique %>% length
@@ -60,7 +60,7 @@ bitr <- function(geneID, fromType, toType, OrgDb, drop=TRUE) {
 
 ##' convert biological ID using KEGG API
 ##'
-##' 
+##'
 ##' @title bitr_kegg
 ##' @param geneID input gene id
 ##' @param fromType input id type
@@ -77,15 +77,15 @@ bitr_kegg <- function(geneID, fromType, toType, organism, drop=TRUE) {
 
     if (fromType == toType)
         stop("fromType and toType should not be identical...")
-    
+
     idconv <- KEGG_convert(fromType, toType, organism)
-    
+
     res <- idconv[idconv[,1] %in% geneID, ]
     n <- sum(!geneID %in% res[,1])
     if (n > 0) {
         warning(paste0(round(n/length(geneID)*100, 2), "%"), " of input gene IDs are fail to map...")
     }
-    
+
     if (! drop && n > 0) {
         misHit <- data.frame(from = geneID[!geneID %in% res[,1]],
                              to = NA)
@@ -97,28 +97,30 @@ bitr_kegg <- function(geneID, fromType, toType, organism, drop=TRUE) {
 }
 
 KEGG_convert <- function(fromType, toType, species) {
-    if (fromType == "kegg" || toType != "kegg") {
+    if (fromType == "kegg" && toType != "kegg") {
         turl <- paste("http://rest.kegg.jp/conv", toType, species, sep='/')
         tidconv <- kegg_rest(turl)
         if (is.null(tidconv))
             stop(toType, " is not supported for ", species, " ...")
         idconv <- tidconv
     }
-    
-    if (toType == "kegg" || fromType != "kegg") {
+
+    if (toType == "kegg" && fromType != "kegg") {
         furl <- paste("http://rest.kegg.jp/conv", fromType, species, sep='/')
         fidconv <- kegg_rest(furl)
         if (is.null(fidconv))
             stop(fromType, " is not supported for ", species, " ...")
         idconv <- fidconv
     }
-    
+
     if (fromType != "kegg" && toType != "kegg") {
         idconv <- merge(fidconv, tidconv, by.x='from', by.y='from')
         idconv <- idconv[, -1]
-        colnames(idconv) <- c("from", "to")
+    } else if (fromType != "kegg") {
+        idconv <- idconv[, c(2,1)]
     }
-    
+
+    colnames(idconv) <- c("from", "to")
     idconv[,1] %<>% gsub("[^:]+:", "", .)
     idconv[,2] %<>% gsub("[^:]+:", "", .)
     return(idconv)
