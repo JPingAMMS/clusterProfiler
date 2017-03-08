@@ -97,7 +97,7 @@ bitr_kegg <- function(geneID, fromType, toType, organism, drop=TRUE) {
 }
 
 KEGG_convert <- function(fromType, toType, species) {
-    if (fromType == "kegg" && toType != "kegg") {
+    if (fromType == "kegg" || toType != "kegg") {
         turl <- paste("http://rest.kegg.jp/conv", toType, species, sep='/')
         tidconv <- kegg_rest(turl)
         if (is.null(tidconv))
@@ -105,7 +105,7 @@ KEGG_convert <- function(fromType, toType, species) {
         idconv <- tidconv
     }
 
-    if (toType == "kegg" && fromType != "kegg") {
+    if (toType == "kegg" || fromType != "kegg") {
         furl <- paste("http://rest.kegg.jp/conv", fromType, species, sep='/')
         fidconv <- kegg_rest(furl)
         if (is.null(fidconv))
@@ -119,8 +119,8 @@ KEGG_convert <- function(fromType, toType, species) {
     } else if (fromType != "kegg") {
         idconv <- idconv[, c(2,1)]
     }
-
     colnames(idconv) <- c("from", "to")
+
     idconv[,1] %<>% gsub("[^:]+:", "", .)
     idconv[,2] %<>% gsub("[^:]+:", "", .)
     return(idconv)

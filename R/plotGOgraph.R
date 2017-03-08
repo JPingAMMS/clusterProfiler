@@ -67,7 +67,7 @@ plotGOgraph <- function(x,
 
     GOdata <- new("topGOdata",
                   description="clusterProfiler enrichment results",
-                  ontology = x@ont,
+                  ontology = ont,
                   allGenes = allgenes,
                   geneSel = selector,
                   annot = annFUN.gene2GO,
