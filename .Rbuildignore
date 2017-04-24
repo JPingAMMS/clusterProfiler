@@ -1,0 +1,13 @@
+inst/extdata/for_unsupported.md
+inst/extdata/for_unsupported.rmd
+.svnignore
+^.*\.DS_Store
+README.md
+Makefile
+.travis.yml
+appveyor.yml
+README.Rmd
+CONTRIBUTING.md
+mkdocs
+docs
+.github
