@@ -5,7 +5,7 @@
 ##' @param geneList order ranked geneList
 ##' @param ont one of "BP", "MF", "CC" or "GO"
 ##' @param OrgDb OrgDb
-##' @param keytype keytype of gene
+##' @param keyType keytype of gene
 ##' @param exponent weight of each step
 ##' @param nPerm permutation numbers
 ##' @param minGSSize minimal size of each geneSet for analyzing
@@ -23,9 +23,9 @@
 ##' @return gseaResult object
 ##' @author Yu Guangchuang
 gseGO <- function(geneList,
-                  ont           = "BP", 
+                  ont           = "BP",
                   OrgDb,
-                  keytype       = "ENTREZID",
+                  keyType       = "ENTREZID",
                   exponent      = 1,
                   nPerm         = 1000,
                   minGSSize     = 10,
@@ -38,8 +38,8 @@ gseGO <- function(geneList,
 
     ont %<>% toupper
     ont <- match.arg(ont, c("BP", "CC", "MF", "ALL"))
-    
-    GO_DATA <- get_GO_data(OrgDb, ont, keytype)
+
+    GO_DATA <- get_GO_data(OrgDb, ont, keyType)
 
     res <-  GSEA_internal(geneList = geneList,
                           exponent = exponent,
@@ -55,14 +55,14 @@ gseGO <- function(geneList,
 
     if (is.null(res))
         return(res)
-    
+
     res@organism <- get_organism(OrgDb)
     res@setType <- ont
-    res@keytype <- keytype
-    
+    res@keytype <- keyType
+
     if (ont == "ALL") {
         res <- add_GO_Ontology(res, GO_DATA)
-    } 
+    }
     return(res)
 }
 
@@ -100,7 +100,7 @@ gseMKEGG <- function(geneList,
                      seed = FALSE,
                      by = 'fgsea') {
 
-    species <- organismMapper(organism)    
+    species <- organismMapper(organism)
     KEGG_DATA <- prepare_KEGG(species, "MKEGG", keyType)
 
     res <-  GSEA_internal(geneList = geneList,
@@ -118,11 +118,11 @@ gseMKEGG <- function(geneList,
     if (is.null(res))
         return(res)
 
-    
+
     res@organism <- species
     res@setType <- "MKEGG"
     res@keytype <- "UNKNOWN"
-    
+
     return(res)
 }
 
@@ -175,11 +175,11 @@ gseKEGG <- function(geneList,
 
     if (is.null(res))
         return(res)
-    
+
     res@organism <- species
     res@setType <- "KEGG"
     res@keytype <- "UNKNOWN"
-    
+
     return(res)
 }
 
